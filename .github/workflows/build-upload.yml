@@ -17,13 +17,14 @@ jobs:
       - name: Install build dependencies
         run: pip install --no-cache-dir -U pip .['build']
 
-      - name: Parse tag value
-        id: parse_tag
-        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
       - name: Compare tag and package version
         run: |
-          python -c 'import importlib.metadata; print(importlib.metadata.version("pymatic"))'
-          echo ${{ steps.parse_tag.outputs.tag }}
+          TAG=${GITHUB_REF#/refs/*/}
+          VERSION=$(python -c 'import importlib.metadata; print(importlib.metadata.version("pymatic"))')
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag value package version are not equal (${TAG} != ${VERSION})!"
+            exit 1
+          fi
       - name: Build package
         run: rm -rf build/ dist/ && python -m build --sdist --wheel
       - name: Upload to PyPI
