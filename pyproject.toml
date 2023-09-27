@@ -29,7 +29,7 @@ audit = ["bandit", "pip-audit"]
 build = ["build", "twine"]
 lint = ["black", "flake8", "mypy", "pre-commit"]
 test = ["pytest"]
-dev = ["thehive4py[audit, lint, test, build]"]
+dev = ["pymatic[audit, lint, test, build]"]
 
 [tool.setuptools.packages.find]
 include = ["thehive4py*"]
