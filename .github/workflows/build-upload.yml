@@ -3,8 +3,6 @@ on:
   push:
     tags:
       - "*"
-  # TODO: remove pull request hook
-  pull_request:
 jobs:
   build-upload:
     name: Build and upload to PyPI
@@ -18,6 +16,14 @@ jobs:
 
       - name: Install build dependencies
         run: pip install --no-cache-dir -U pip .['build']
+
+      - name: Parse tag value
+        id: parse_tag
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      - name: Compare tag and package version
+        run: |
+          python -c 'import importlib.metadata; print(importlib.metadata.version("pymatic"))'
+          echo ${{ steps.parse_tag.outputs.tag }}
       - name: Build package
         run: rm -rf build/ dist/ && python -m build --sdist --wheel
       - name: Upload to PyPI
