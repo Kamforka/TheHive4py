@@ -4,7 +4,10 @@ on:
     tags:
       - "*"
 jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
   build-upload:
+    needs: [tests]
     name: Build and upload to PyPI
     runs-on: ubuntu-latest
     steps:
@@ -22,7 +25,7 @@ jobs:
           TAG=${GITHUB_REF#refs/*/}
           VERSION=$(python -c 'import importlib.metadata; print(importlib.metadata.version("pymatic"))')
           if [ "$TAG" != "$VERSION" ]; then
-            echo "Tag value and package version are different (${TAG} != ${VERSION})!"
+            echo "Tag value and package version are different: ${TAG} != ${VERSION}"
             exit 1
           fi
       - name: Build package

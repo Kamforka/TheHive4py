@@ -1,0 +1,11 @@
+name: tests
+on: 
+  workflow_call:
+jobs:
+  tests:
+    name: Dummy tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy test run
+        run: exit $((RANDOM % 2))
+
