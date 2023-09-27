@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pymatic"
 description = "Python client for TheHive5"
-version = "2.0.0b4"
+version = "0b1"
 requires-python = ">=3.8"
 dependencies = ["requests>=2.27"]
 readme = "README.md"
@@ -29,7 +29,7 @@ audit = ["bandit", "pip-audit"]
 build = ["build", "twine"]
 lint = ["black", "flake8", "mypy", "pre-commit"]
 test = ["pytest"]
-dev = ["thehive4py[audit, lint, test, build]"]
+dev = ["pymatic[audit, lint, test, build]"]
 
 [tool.setuptools.packages.find]
 include = ["thehive4py*"]

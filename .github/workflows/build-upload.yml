@@ -3,8 +3,6 @@ on:
   push:
     tags:
       - "*"
-  # TODO: remove pull request hook
-  pull_request:
 jobs:
   build-upload:
     name: Build and upload to PyPI
@@ -18,6 +16,15 @@ jobs:
 
       - name: Install build dependencies
         run: pip install --no-cache-dir -U pip .['build']
+
+      - name: Compare tag and package version
+        run: |
+          TAG=${GITHUB_REF#/refs/*/}
+          VERSION=$(python -c 'import importlib.metadata; print(importlib.metadata.version("pymatic"))')
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag value and package version are different (${TAG} != ${VERSION})!"
+            exit 1
+          fi
       - name: Build package
         run: rm -rf build/ dist/ && python -m build --sdist --wheel
       - name: Upload to PyPI
